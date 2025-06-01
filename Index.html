@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sachi Salon - Where Beauty Blooms</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Optional: Customize Tailwind's default theme
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sachi-primary': '#5C4B5C', // Deep, elegant purple
+                        'sachi-accent': '#B18FAD',  // Soft plum
+                        'sachi-light': '#F8F4F1',   // Soft, warm background
+                        'sachi-text': '#333',
+                        'sachi-muted': '#7A6C7C',
+                    },
+                    fontFamily: {
+                        display: ['Playfair Display', 'serif'],
+                        body: ['Roboto', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom CSS for specific elements or overrides not easily done with Tailwind */
+        body {
+            line-height: 1.7;
+            /* overflow-x: hidden; REMOVED as it was primarily for animation overflow */
+        }
+
+        /* Hero Slider Specifics (Tailwind doesn't have direct slider components) */
+        .hero-slider {
+            display: flex;
+            width: 300%; /* For 3 slides */
+            height: 100%;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .hero-slide {
+            width: 100%;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+        }
+
+        /* Mobile Nav Toggle Icon Animation (kept as it's a functional UI animation) */
+        .nav-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 1050; /* Ensure it's above other elements */
+        }
+
+        .nav-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .nav-toggle.open .bar:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .nav-toggle.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.open .bar:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* Page Content display (REMOVED fade/translate transitions) */
+        .page-content {
+            display: none; /* Hidden by default, shown by JS */
+            /* Removed transform and opacity transitions */
+        }
+
+        .page-content.active {
+            display: block; /* Active page is shown instantly */
+            /* Removed transform and opacity changes for active state */
+        }
+
+        /* Specific for Font Awesome icon alignment in contact */
+        #contact .contact-info p .icon {
+            width: 30px; /* Ensure icon alignment */
+        }
+
+        /* Responsive Navbar specific to JS interaction */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none; /* Hidden by default on mobile */
+                flex-direction: column;
+                position: absolute;
+                top: 6rem; /* Adjust based on header height */
+                left: 0;
+                width: 100%;
+                background-color: theme('colors.sachi-primary');
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            nav ul.show {
+                display: flex; /* Show when active */
+            }
+        }
+    </style>
+</head>
+<body class="font-body bg-sachi-light text-sachi-text">
+    <header class="bg-sachi-primary text-white p-4 flex justify-between items-center flex-wrap shadow-lg sticky top-0 z-50">
+        <div class="font-display text-3xl font-bold text-white">Sachi Salon</div>
+        <div class="nav-toggle md:hidden" id="navToggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <nav class="w-full md:w-auto md:block">
+            <ul id="mainNav" class="list-none p-0 m-0 flex flex-col md:flex-row md:space-x-8 md:gap-0 gap-2">
+                <li><a href="#home" data-page="home" class="block py-2 px-4 md:py-0 md:px-0 text-white hover:text-sachi-accent relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-sachi-accent after:transition-all after:duration-300 hover:after:w-full">Home</a></li>
+                <li><a href="#services" data-page="services" class="block py-2 px-4 md:py-0 md:px-0 text-white hover:text-sachi-accent relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-sachi-accent after:transition-all after:duration-300 hover:after:w-full">Services</a></li>
+                <li><a href="#contact" data-page="contact" class="block py-2 px-4 md:py-0 md:px-0 text-white hover:text-sachi-accent relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-sachi-accent after:transition-all after:duration-300 hover:after:w-full">Contact</a></li>
+                <li><a href="https://example.com/booking" target="_blank" class="block mt-2 md:mt-0 md:ml-4 bg-sachi-accent text-white px-5 py-2 rounded-full font-bold uppercase tracking-wide hover:bg-sachi-muted hover:shadow-lg transition duration-300">Book Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+       <section id="home" class="page-content active px-8 py-16 max-w-7xl mx-auto my-8 bg-white rounded-xl shadow-lg">
+            <div class="relative overflow-hidden rounded-xl shadow-xl mb-12">
+                <img src="img/sachi-salon-colourful.jpg" alt="Colourful view of Sachi Salon" class="w-full h-auto object-cover rounded-xl" style="max-height: 500px;">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60"></div>
+                <div class="absolute bottom-8 left-8 md:left-16 text-white">
+                    <h2 class="text-3xl md:text-5xl font-display font-bold mb-2">Welcome to Sachi Salon</h2>
+                    <p class="text-lg md:text-xl mb-6">Your Premier Hair & Beauty Destination in Kingswood, NSW.</p>
+                    <a href="#services" class="bg-sachi-accent text-white px-6 py-3 rounded-full font-bold uppercase tracking-wide hover:bg-sachi-muted hover:shadow-lg transition duration-300" data-page="services">Explore Our Services</a>
+                </div>
+            </div>
+
+            <div class="about-section flex flex-col md:flex-row items-center gap-8 mt-12 text-center md:text-left">
+                <div class="text-content flex-1 min-w-xs">
+                    <h2 class="text-4xl font-display font-bold mb-4 text-sachi-primary">Welcome to Sachi Salon</h2>
+                    <p class="text-lg text-sachi-text mb-4">At Sachi Salon, we are passionate about bringing your beauty aspirations to life. Located in the heart of Kingswood, New South Wales, Australia, our salon is a haven of relaxation and style. We combine traditional techniques with modern trends to offer a diverse range of services, all delivered by our highly skilled and friendly team.</p>
+                    <p class="text-lg text-sachi-text mb-4">We believe in using only the finest products and providing a personalized experience for every client. Your satisfaction is our priority, and we strive to make every visit a memorable one. Come and experience the Sachi difference!</p>
+                    <a href="#contact" class="bg-sachi-primary text-white px-8 py-3 rounded-full font-bold uppercase tracking-wide hover:bg-sachi-muted hover:shadow-lg transition duration-300 mt-6 inline-block" data-page="contact">Get in Touch</a>
+                </div>
+                <div class="image-content flex-1 min-w-xs">
+                    <img src="img/about-sachi.jpg" alt="Interior of Sachi Salon" class="max-w-full rounded-xl shadow-md">
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="page-content px-8 py-16 max-w-7xl mx-auto my-8 bg-white rounded-xl shadow-lg">
+            <h2 class="text-4xl font-display font-bold text-center mb-4 text-sachi-primary">Our Exceptional Services</h2>
+            <p class="text-center mb-12 text-lg text-sachi-muted">Discover our extensive menu of treatments designed to pamper and perfect.</p>
+
+            <div class="service-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-item bg-white rounded-xl shadow-md p-8 text-center transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
+                    <i class="fas fa-cut text-5xl text-sachi-accent mb-4"></i>
+                    <h3 class="text-2xl font-display font-bold text-sachi-primary mb-2">Precision Haircuts & Styling</h3>
+                    <p class="text-sachi-text mb-4">From a fresh trim to a dramatic transformation, our stylists craft personalized looks. Includes wash, cut, and blow-dry.</p>
+                    <span class="block font-bold text-xl text-sachi-muted mt-4">Starting from $65</span>
+                </div>
+                <div class="service-item bg-white rounded-xl shadow-md p-8 text-center transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
+                    <i class="fas fa-palette text-5xl text-sachi-accent mb-4"></i>
+                    <h3 class="text-2xl font-display font-bold text-sachi-primary mb-2">Vibrant Hair Coloring</h3>
+                    <p class="text-sachi-text mb-4">Explore a spectrum of colors: highlights, balayage, full color, and creative custom shades for stunning results.</p>
+                    <span class="block font-bold text-xl text-sachi-muted mt-4">Starting from $100</span>
+                </div>
+                <div class="service-item bg-white rounded-xl shadow-md p-8 text-center transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
+                    <i class="fas fa-hand-sparkles text-5xl text-sachi-accent mb-4"></i>
+                    <h3 class="text-2xl font-display font-bold text-sachi-primary mb-2">Luxurious Manicures & Pedicures</h3>
+                    <p class="text-sachi-text mb-4">Indulge your hands and feet with our spa-quality treatments, including gel polish options.</p>
+                    <span class="block font-bold text-xl text-sachi-muted mt-4">Manicure: $40 | Pedicure: $50</span>
+                </div>
+                <div class="service-item bg-white rounded-xl shadow-md p-8 text-center transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
+                    <i class="fas fa-spa text-5xl text-sachi-accent mb-4"></i>
+                    <h3 class="text-2xl font-display font-bold text-sachi-primary mb-2">Rejuvenating Facial Treatments</h3>
+                    <p class="text-sachi-text mb-4">Customized facials to nourish, purify, and restore your skin's natural glow for a healthier complexion.</p>
+                    <span class="block font-bold text-xl text-sachi-muted mt-4">Starting from $90</span>
+                </div>
+                <div class="service-item bg-white rounded-xl shadow-md p-8 text-center transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
+                    <i class="fas fa-head-side-mask text-5xl text-sachi-accent mb-4"></i>
+                    <h3 class="text-2xl font-display font-bold text-sachi-primary mb-2">Specialty Hair Treatments</h3>
+                    <p class="text-sachi-text mb-4">Deep conditioning, keratin treatments, and hair repair solutions for healthier, shinier hair.</p>
+                    <span class="block font-bold text-xl text-sachi-muted mt-4">Starting from $50</span>
+                </div>
+                <div class="service-item bg-white rounded-xl shadow-md p-8 text-center transition-all duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-xl">
+                    <i class="fas fa-eye text-5xl text-sachi-accent mb-4"></i>
+                    <h3 class="text-2xl font-display font-bold text-sachi-primary mb-2">Brow & Lash Enhancements</h3>
+                    <p class="text-sachi-text mb-4">Expert brow shaping, tinting, and lash lifts/extensions to frame your face beautifully.</p>
+                    <span class="block font-bold text-xl text-sachi-muted mt-4">Starting from $25</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="page-content px-8 py-16 max-w-7xl mx-auto my-8 bg-white rounded-xl shadow-lg">
+            <h2 class="text-4xl font-display font-bold text-center mb-4 text-sachi-primary">Connect With Sachi Salon</h2>
+            <p class="text-center mb-12 text-lg text-sachi-muted">We look forward to welcoming you to our salon. Reach out for appointments or inquiries!</p>
+
+            <div class="contact-grid grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="contact-info bg-sachi-light p-8 rounded-xl shadow-inner">
+                    <h3 class="text-3xl font-display font-bold mb-6 text-sachi-primary">Our Details</h3>
+                    <p class="flex items-center mb-4 text-lg text-sachi-text"><i class="fas fa-map-marker-alt text-sachi-accent mr-4 text-2xl icon"></i> <strong>Address:</strong> 456 Beauty Lane, Kingswood, NSW 2747, Australia</p>
+                    <p class="flex items-center mb-4 text-lg text-sachi-text"><i class="fas fa-phone-alt text-sachi-accent mr-4 text-2xl icon"></i> <strong>Phone:</strong> <a href="tel:+61287654321" class="text-sachi-text hover:text-sachi-primary">(02) 8765 4321</a></p>
+                    <p class="flex items-center mb-6 text-lg text-sachi-text"><i class="fas fa-envelope text-sachi-accent mr-4 text-2xl icon"></i> <strong>Email:</strong> <a href="mailto:info@sachisalon.com.au" class="text-sachi-text hover:text-sachi-primary">info@sachisalon.com.au</a></p>
+
+                    <h3 class="text-3xl font-display font-bold mb-4 text-sachi-primary">Opening Hours</h3>
+                    <ul class="list-none p-0 m-0 text-lg text-sachi-text">
+                        <li class="mb-2"><i class="far fa-calendar-alt text-sachi-accent mr-3"></i> Monday: 9:00 AM - 6:00 PM</li>
+                        <li class="mb-2"><i class="far fa-calendar-alt text-sachi-accent mr-3"></i> Tuesday: 9:00 AM - 6:00 PM</li>
+                        <li class="mb-2"><i class="far fa-calendar-alt text-sachi-accent mr-3"></i> Wednesday: 9:00 AM - 7:00 PM</li>
+                        <li class="mb-2"><i class="far fa-calendar-alt text-sachi-accent mr-3"></i> Thursday: 9:00 AM - 8:00 PM</li>
+                        <li class="mb-2"><i class="far fa-calendar-alt text-sachi-accent mr-3"></i> Friday: 9:00 AM - 7:00 PM</li>
+                        <li class="mb-2"><i class="far fa-calendar-alt text-sachi-accent mr-3"></i> Saturday: 10:00 AM - 5:00 PM</li>
+                        <li class="mb-2"><i class="far fa-calendar-alt text-sachi-accent mr-3"></i> Sunday: Closed</li>
+                    </ul>
+                    <a href="https://maps.app.goo.gl/YourGoogleMapsLinkHere" target="_blank" class="bg-sachi-primary text-white px-8 py-3 rounded-full font-bold uppercase tracking-wide hover:bg-sachi-muted hover:shadow-lg transition duration-300 mt-6 inline-block"><i class="fas fa-directions mr-2"></i> Get Directions</a>
+                </div>
+                <div class="contact-form bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-3xl font-display font-bold mb-6 text-sachi-primary">Send Us a Message</h3>
+                    <form action="#" method="POST"> <label for="name" class="block mb-2 font-bold text-sachi-primary">Your Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required class="w-full p-3 mb-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-sachi-accent">
+
+                        <label for="email" class="block mb-2 font-bold text-sachi-primary">Your Email:</label>
+                        <input type="email" id="email" name="email" placeholder="e.g., example@email.com" required class="w-full p-3 mb-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-sachi-accent">
+
+                        <label for="subject" class="block mb-2 font-bold text-sachi-primary">Subject:</label>
+                        <input type="text" id="subject" name="subject" placeholder="What's your inquiry about?" class="w-full p-3 mb-4 border border-gray-300 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-sachi-accent">
+
+                        <label for="message" class="block mb-2 font-bold text-sachi-primary">Your Message:</label>
+                        <textarea id="message" name="message" placeholder="Type your message here..." required class="w-full p-3 mb-6 border border-gray-300 rounded-lg text-lg min-h-[140px] resize-y focus:outline-none focus:ring-2 focus:ring-sachi-accent"></textarea>
+
+                        <button type="submit" class="bg-sachi-primary text-white px-8 py-4 rounded-full font-bold uppercase tracking-wide text-lg cursor-pointer hover:bg-sachi-muted hover:shadow-xl transition duration-300 w-full md:w-auto self-start"><i class="fas fa-paper-plane mr-2"></i> Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-sachi-primary text-white text-center py-10 mt-16 shadow-inner">
+        <div class="social-icons mb-6">
+            <a href="https://www.facebook.com/SachiSalonAU" target="_blank" aria-label="Sachi Salon Facebook" class="text-white text-3xl mx-4 transition-transform duration-300 hover:scale-125"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/sachisalon_au" target="_blank" aria-label="Sachi Salon Instagram" class="text-white text-3xl mx-4 transition-transform duration-300 hover:scale-125"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" aria-label="Sachi Salon Twitter" class="text-white text-3xl mx-4 transition-transform duration-300 hover:scale-125"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank" aria-label="Sachi Salon Pinterest" class="text-white text-3xl mx-4 transition-transform duration-300 hover:scale-125"><i class="fab fa-pinterest-p"></i></a>
+        </div>
+        <p class="text-sm opacity-80">© <span id="currentYear"></span> Sachi Salon. All rights reserved. | Crafted with care in Kingswood, NSW, Australia.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('nav ul li a, [data-page]');
+            const pages = document.querySelectorAll('.page-content');
+            const navToggle = document.getElementById('navToggle');
+            const mainNav = document.getElementById('mainNav');
+            const header = document.querySelector('header'); // Get the header for accurate scroll offset
+
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Function to show/hide pages (without animations)
+            function showPage(pageId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    // Smooth scroll to the active page, accounting for fixed header
+                    setTimeout(() => { // Give a moment for the page to display before scrolling
+                        window.scrollTo({ top: targetPage.offsetTop - header.offsetHeight, behavior: 'smooth' });
+                    }, 100);
+                }
+            }
+
+            // Event listeners for navigation links and buttons
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const pageId = this.dataset.page || this.getAttribute('href').substring(1); // Get from data-page or href
+                    if (pageId && pageId !== 'home' && pageId !== 'services' && pageId !== 'contact') {
+                        // For external links or booking buttons, let them go normally
+                        window.open(this.href, this.target || '_self');
+                        return;
+                    }
+                    if (pageId) {
+                        showPage(pageId);
+                        // Hide mobile nav after selection
+                        if (mainNav.classList.contains('show')) {
+                            mainNav.classList.remove('show');
+                            navToggle.classList.remove('open');
+                        }
+                    }
+                });
+            });
+
+            // Mobile navigation toggle
+            navToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('show');
+                navToggle.classList.toggle('open');
+            });
+
+            // Hero Slider functionality
+            const heroSlider = document.getElementById('heroSlider');
+            const slides = document.querySelectorAll('.hero-slide');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }
+
+            function updateSlider() {
+                const offset = -currentSlide * 100;
+                heroSlider.style.transform = `translateX(${offset}%)`;
+            }
+
+            // Auto-advance slider every 5 seconds
+            setInterval(nextSlide, 5000);
+
+            // Initial page load: show home page
+            showPage('home');
+        });
+    </script>
+</body>
+</html>
